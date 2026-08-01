@@ -18,3 +18,8 @@ public:
         return s;   
     }
 };
+
+// Time Complexity: O(N⋅MlogN)
+// (Sorting the strings takes the most time, as comparing each string takes up to M operations).
+// Space Complexity: O(M)
+// (To store the copies of the strings and the final prefix result).
