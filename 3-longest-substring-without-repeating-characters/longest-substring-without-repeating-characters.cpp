@@ -1,39 +1,53 @@
-#include <iostream>
+/*
+// YOUR ORIGINAL SOLUTION:
+// class Solution {
+// public:
+//     int lengthOfLongestSubstring(string s) {
+//         unordered_set<char> mymap;
+// 
+//         for(int i =0;i< s.size();i++){
+//             if(mymap.count(s[i])==0){
+//                 mymap.insert(s[i]);
+//             }
+// 
+//         } 
+//         return mymap.size();
+//     }
+// };
+
+// WHY IT WAS WRONG:
+// 1. It counts the total number of unique characters in the entire string, not a contiguous substring.
+// 2. If given "pwwkew", your code returns 4 ('p', 'w', 'k', 'e'). The actual longest substring is "wke" (3).
+// 3. It never resets or shrinks when it encounters a duplicate character.
+
+// THE CORRECT IDEA (SLIDING WINDOW):
+// - Use two pointers ('left' and 'right') to create a "window" of characters.
+// - Expand the window to the right by adding characters to a set.
+// - If you hit a duplicate at the 'right' pointer, shrink the window from the 'left' 
+//   by removing characters from the set until that duplicate is gone.
+// - Update the maximum length recorded each time you successfully add a new character.
+*/
+
 #include <unordered_set>
-#include <algorithm>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        // This set will store the characters in our current "window"
-        unordered_set<char> windowSet;
-        
-        // 'left' is the start index of our sliding window
-        int left = 0; 
-        
-        // This will keep track of the maximum length we've seen so far
-        int maxLength = 0; 
+        unordered_set<char> window;
+        int left = 0;
+        int maxLength = 0;
 
-        // 'right' is the end index of our sliding window, expanding one by one
         for (int right = 0; right < s.size(); right++) {
-            
-            // If the character at 'right' is already in our set, we have a duplicate!
-            // We must shrink our window from the 'left' until the duplicate is gone.
-            while (windowSet.count(s[right]) > 0) {
-                // Remove the character at the 'left' pointer from the set
-                windowSet.erase(s[left]);
-                // Move the left pointer forward to shrink the window
+            while (window.count(s[right]) > 0) {
+                window.erase(s[left]);
                 left++;
             }
             
-            // Now it's safe to add our new character to the set
-            windowSet.insert(s[right]);
-            
-            // Calculate the current window size (right - left + 1)
-            // and update maxLength if this window is the biggest one we've seen
+            window.insert(s[right]);
             maxLength = max(maxLength, right - left + 1);
         } 
         
